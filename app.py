@@ -25,6 +25,9 @@ def check_week_and_group():
     today = datetime.datetime.now()
     week_number = (today.day - 1) // 7 + 1  # Calculate the week number in the current month
     day_of_week = today.weekday()  # Monday is 0, Thursday is 3
+
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    day_name = days[day_of_week]
     
     df = read_group_data()
     print("Columns:", df.columns)
@@ -43,17 +46,18 @@ def check_week_and_group():
     print("Members to post:", members_to_post)
     if members_to_post:
         message = "\n".join(members_to_post)
+        message = "<@U05F6L62KGD> Duty Today: " + day_name + ", Week " + str(week_number) + "\n" + message
         slack_client.chat_postMessage(channel="C06K88HBM46", text=message)
 
 # Schedule the job every Monday at 10:00 AM
-schedule.every().monday.at("11:53").do(check_week_and_group)
+schedule.every().monday.at("10:00").do(check_week_and_group)
 schedule.every().thursday.at("10:00").do(check_week_and_group)
 
 # Function to run the scheduled jobs
 def run_scheduled_jobs():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(5)
 
 # Run the scheduled jobs in a separate thread
 import threading
@@ -62,8 +66,9 @@ threading.Thread(target=run_scheduled_jobs).start()
 # Define a route for testing purposes
 @app.route('/')
 def index():
-    slack_client.chat_postMessage(channel="C06K88HBM46", text="Test")
+    # test directly    
+    slack_client.chat_postMessage(channel="C06K88HBM46", text="<@channel>")
     return "Duty Roster Schedule CronJob"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
