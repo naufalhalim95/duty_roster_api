@@ -1,5 +1,6 @@
 from flask import Flask
 import schedule
+import os
 import time
 import datetime
 import pandas as pd
@@ -7,7 +8,7 @@ from slack_sdk import WebClient
 
 app = Flask(__name__)
 
-slack_token = 'xoxb-2746261281-6683740850576-P4zjvUee4yUEKb1J1KqRjzGs'
+slack_token = os.getenv('SLACK_BOT_TOKEN', default=None)
 slack_client = WebClient(token=slack_token)
 
 # Function to read group data from CSV into a DataFrame
