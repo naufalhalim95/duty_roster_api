@@ -5,10 +5,13 @@ import time
 import datetime
 import pandas as pd
 from slack_sdk import WebClient
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
-slack_token = os.getenv('SLACK_BOT_TOKEN', default=None)
+slack_token = os.getenv("SLACK_BOT_TOKEN", default=None)
+print("TOOOOKEEEEN" ,slack_token)
 slack_client = WebClient(token=slack_token)
 
 # Function to read group data from CSV into a DataFrame
